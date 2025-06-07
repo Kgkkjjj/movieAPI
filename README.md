@@ -18,10 +18,22 @@ functionality similar to larger movie databases.
 - `/movies/search?q=title` - Search movies by title substring.
 - `/movies/by_size?min=&max=` - Filter movies by file size in MB.
 - `/movies/shows/{show}` - List all movies for a particular show name.
+- `/movies/count` - Total count of available movies.
+- `/movies/stats` - Summary stats for movie file sizes.
+- `/movies/sorted_by_size` - Movies sorted by file size.
+- `/movies/sorted_by_episode` - Movies sorted by season/episode.
+- `/movies/by_season/{season}` - Movies within a season.
+- `/movies/shows/{show}/season/{season}` - Movies for a show and season.
+- `/movies/shows/{show}/episode/{episode}` - Movies for a show and episode.
+- `/movies/random` - Retrieve a random movie.
 - `/shows` - List all unique show names present in the movie dataset.
+- `/shows/search?q=name` - Search show names.
 - `/shows/{show}/seasons` - List seasons available for a show.
+- `/shows/{show}/summary` - Map seasons to episode lists.
 - `/shows/{show}/seasons/{season}/episodes` - List episodes for a specific season.
 - `/anime` - Returns a list of anime from the remote repo.
+- `/anime/count` - Total count of anime entries.
+- `/anime/random` - Retrieve a random anime show.
 - `/anime/{id}` - Look up an anime show by numeric `id`.
 - `/anime/search?q=title` - Search anime by title substring.
 

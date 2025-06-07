@@ -2,6 +2,7 @@ import json
 import requests
 from typing import List, Optional
 import re
+import random
 
 REPO_BASE_URL = 'https://raw.githubusercontent.com/Kgkkjjj/shows-/main/'
 MOVIES_FILE = 'movies.json'
@@ -114,3 +115,115 @@ def get_movies_by_show(show_name: str) -> List[dict]:
 def search_anime(title: str) -> List[dict]:
     query = title.lower()
     return [a for a in get_anime() if query in str(a.get("title", "")).lower()]
+
+
+# Additional helper systems
+def get_movie_count() -> int:
+    """Return the total number of movies available."""
+    return len(get_movies())
+
+
+def get_movie_stats() -> dict:
+    """Return simple statistics about movie sizes."""
+    movies = get_movies()
+    sizes = [float(m["size_mb"]) for m in movies if m.get("size_mb") is not None]
+    total = sum(sizes)
+    avg = total / len(sizes) if sizes else 0.0
+    return {"count": len(movies), "total_size_mb": total, "avg_size_mb": avg}
+
+
+def sort_movies_by_size(order: str = "asc") -> List[dict]:
+    """Return movies sorted by file size."""
+    movies = sorted(
+        get_movies(), key=lambda m: (m.get("size_mb") is None, m.get("size_mb", 0.0))
+    )
+    if order == "desc":
+        movies.reverse()
+    return movies
+
+
+def sort_movies_by_episode(order: str = "asc") -> List[dict]:
+    """Return movies sorted by season/episode."""
+    movies = sorted(
+        get_movies(), key=lambda m: (m.get("season", 0), m.get("episode", 0))
+    )
+    if order == "desc":
+        movies.reverse()
+    return movies
+
+
+def sort_movies_by_title(order: str = "asc") -> List[dict]:
+    """Return movies sorted by title."""
+    movies = sorted(get_movies(), key=lambda m: m.get("title", ""))
+    if order == "desc":
+        movies.reverse()
+    return movies
+
+
+def filter_movies_by_season(season: int) -> List[dict]:
+    """Return all movies for a given season number."""
+    return [m for m in get_movies() if m.get("season") == season]
+
+
+def filter_movies_by_show_season(show: str, season: int) -> List[dict]:
+    """Return movies for a show filtered by season."""
+    query = show.lower()
+    return [
+        m
+        for m in get_movies()
+        if m.get("show", "").lower() == query and m.get("season") == season
+    ]
+
+
+def filter_movies_by_show_episode(show: str, episode: int) -> List[dict]:
+    """Return movies for a show filtered by episode number."""
+    query = show.lower()
+    return [
+        m
+        for m in get_movies()
+        if m.get("show", "").lower() == query and m.get("episode") == episode
+    ]
+
+
+def get_random_movie() -> Optional[dict]:
+    """Return a random movie if available."""
+    movies = get_movies()
+    return random.choice(movies) if movies else None
+
+
+def get_random_anime() -> Optional[dict]:
+    """Return a random anime show if available."""
+    shows = get_anime()
+    return random.choice(shows) if shows else None
+
+
+def search_shows(query: str) -> List[str]:
+    """Case-insensitive search across available show names."""
+    q = query.lower()
+    return [s for s in get_unique_shows() if q in s.lower()]
+
+
+def get_show_summary(show: str) -> dict:
+    """Return mapping of seasons to episode numbers for a show."""
+    episodes = get_movies_by_show(show)
+    summary = {}
+    for m in episodes:
+        season = m.get("season")
+        ep = m.get("episode")
+        if season is None or ep is None:
+            continue
+        summary.setdefault(season, []).append(ep)
+    for season in summary:
+        summary[season] = sorted(summary[season])
+    return {k: summary[k] for k in sorted(summary)}
+
+
+def get_anime_count() -> int:
+    """Return the number of anime shows available."""
+    return len(get_anime())
+
+
+def get_latest_movie() -> Optional[dict]:
+    """Return the movie with the highest season/episode."""
+    movies = sort_movies_by_episode(order="desc")
+    return movies[0] if movies else None
