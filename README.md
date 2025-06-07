@@ -49,3 +49,13 @@ Install dependencies and start the server:
 pip install fastapi uvicorn requests
 uvicorn main:app --reload
 ```
+
+## GTK Movie Uploader
+
+A simple C/GTK program in `gtk_uploader/` lets you append new entries to
+`movies.json`. Build it with `make` (requires `gtk+-3.0`, `libcurl`, and
+`jansson` development headers). Running the resulting `uploader` binary
+provides a small form to submit new movie records. By default the updated
+file is written locally, but you can adapt the program to upload it back to
+GitHub using a personal access token in the `GITHUB_TOKEN` environment
+variable.
