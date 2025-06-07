@@ -64,3 +64,17 @@ provides a small form to submit new movie records. By default the updated
 file is written locally, but you can adapt the program to upload it back to
 GitHub using a personal access token in the `GITHUB_TOKEN` environment
 variable.
+
+## Updating `movies.json`
+
+The repository includes a helper script `update_movies.py` that downloads
+`movies.json` from the upstream repository and commits the updated file. If
+you have the GPG key `9F28B4FCD2B9A0BE` available, the script attempts to
+sign the commit. Usage:
+
+```bash
+python update_movies.py "Update movies.json"
+```
+
+If signing fails (e.g. the key is not present), the commit will be created
+without a signature.
