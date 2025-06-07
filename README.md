@@ -55,6 +55,19 @@ pip install fastapi uvicorn requests
 uvicorn main:app --reload
 ```
 
+## Node.js Version
+
+For users that prefer Node.js, a companion implementation lives in
+`movieAPI_nodejs/`. It exposes similar endpoints using Express.
+
+Run it with:
+
+```bash
+cd movieAPI_nodejs
+npm install
+npm start
+```
+
 ## GTK Movie Uploader
 
 A simple C/GTK program in `gtk_uploader/` lets you append new entries to
