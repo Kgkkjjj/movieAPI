@@ -28,9 +28,16 @@ from data_loader import (
     get_latest_anime,
     sort_movies_by_title,
     sort_anime_by_title,
+    refresh_cache,
 )
 
 app = FastAPI(title="movieAPI")
+
+
+@app.post("/refresh")
+def refresh():
+    """Force refresh of cached remote data."""
+    return refresh_cache()
 
 @app.get("/movies")
 def movies():

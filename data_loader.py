@@ -3,10 +3,18 @@ import requests
 from typing import List, Optional
 import re
 import random
+import time
 
 REPO_BASE_URL = 'https://raw.githubusercontent.com/Kgkkjjj/shows-/main/'
 MOVIES_FILE = 'movies.json'
 ANIME_FILE = 'anime.json'
+
+# simple in-memory caches for remote data
+MOVIES_CACHE: List[dict] = []
+ANIME_CACHE: List[dict] = []
+MOVIES_CACHE_TIME = 0.0
+ANIME_CACHE_TIME = 0.0
+CACHE_TTL = 300  # seconds
 
 
 def fetch_remote_json(filename: str) -> List[dict]:
@@ -28,8 +36,12 @@ def _parse_title(title: str):
     return None, None, None
 
 
-def get_movies() -> List[dict]:
+def get_movies(force_refresh: bool = False) -> List[dict]:
     """Return list of movies enriched with ids and parsed fields."""
+    global MOVIES_CACHE, MOVIES_CACHE_TIME
+    if not force_refresh and MOVIES_CACHE and time.time() - MOVIES_CACHE_TIME < CACHE_TTL:
+        return MOVIES_CACHE
+
     raw = fetch_remote_json(MOVIES_FILE)
     movies = []
     for idx, item in enumerate(raw, 1):
@@ -45,6 +57,9 @@ def get_movies() -> List[dict]:
                 "episode": episode,
             }
         )
+
+    MOVIES_CACHE = movies
+    MOVIES_CACHE_TIME = time.time()
     return movies
 
 
@@ -71,8 +86,22 @@ def get_episodes_for_show_season(show_name: str, season: int) -> List[dict]:
     ]
 
 
-def get_anime() -> List[dict]:
-    return fetch_remote_json(ANIME_FILE)
+def get_anime(force_refresh: bool = False) -> List[dict]:
+    global ANIME_CACHE, ANIME_CACHE_TIME
+    if not force_refresh and ANIME_CACHE and time.time() - ANIME_CACHE_TIME < CACHE_TTL:
+        return ANIME_CACHE
+
+    data = fetch_remote_json(ANIME_FILE)
+    ANIME_CACHE = data
+    ANIME_CACHE_TIME = time.time()
+    return data
+
+
+def refresh_cache() -> dict:
+    """Force refresh of both movies and anime caches."""
+    movies = get_movies(force_refresh=True)
+    anime = get_anime(force_refresh=True)
+    return {"movies": len(movies), "anime": len(anime)}
 
 
 def get_movie(movie_id: int) -> Optional[dict]:

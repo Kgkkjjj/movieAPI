@@ -40,6 +40,11 @@ functionality similar to larger movie databases.
 - `/anime/latest` - Retrieve the last anime show in the list.
 - `/anime/{id}` - Look up an anime show by numeric `id`.
 - `/anime/search?q=title` - Search anime by title substring.
+- `/refresh` (POST) - Force refresh of cached data from GitHub.
+
+The service caches movie and anime data in memory for five minutes to
+avoid repeatedly hitting the upstream repository. Use `/refresh` if you need
+to force an update immediately.
 
 ## Running
 
