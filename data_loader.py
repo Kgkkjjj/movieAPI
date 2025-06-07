@@ -47,6 +47,29 @@ def get_movies() -> List[dict]:
     return movies
 
 
+def get_unique_shows() -> List[str]:
+    """Return a sorted list of unique show names present in the movies."""
+    shows = {m["show"] for m in get_movies() if m.get("show")}
+    return sorted(shows)
+
+
+def get_seasons_for_show(show_name: str) -> List[int]:
+    """Return a sorted list of seasons for a given show."""
+    query = show_name.lower()
+    seasons = {m["season"] for m in get_movies() if m.get("show", "").lower() == query and m.get("season") is not None}
+    return sorted(seasons)
+
+
+def get_episodes_for_show_season(show_name: str, season: int) -> List[dict]:
+    """Return movies that match a show name and season number."""
+    query = show_name.lower()
+    return [
+        m
+        for m in get_movies()
+        if m.get("show", "").lower() == query and m.get("season") == season
+    ]
+
+
 def get_anime() -> List[dict]:
     return fetch_remote_json(ANIME_FILE)
 

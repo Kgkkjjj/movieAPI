@@ -8,6 +8,9 @@ from data_loader import (
     search_anime,
     filter_movies_by_size,
     get_movies_by_show,
+    get_unique_shows,
+    get_seasons_for_show,
+    get_episodes_for_show_season,
 )
 
 app = FastAPI(title="movieAPI")
@@ -32,6 +35,24 @@ def movie_by_size(min: float = 0.0, max: float = 1e9):
 def movies_for_show(show: str):
     """Return all movies belonging to a given show name."""
     return {"movies": get_movies_by_show(show)}
+
+
+@app.get("/shows")
+def list_shows():
+    """List unique show names."""
+    return {"shows": get_unique_shows()}
+
+
+@app.get("/shows/{show}/seasons")
+def show_seasons(show: str):
+    """List seasons available for a given show."""
+    return {"seasons": get_seasons_for_show(show)}
+
+
+@app.get("/shows/{show}/seasons/{season}/episodes")
+def show_episodes(show: str, season: int):
+    """List episodes for a specific show and season."""
+    return {"episodes": get_episodes_for_show_season(show, season)}
 
 
 @app.get("/movies/{movie_id}")

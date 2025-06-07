@@ -18,6 +18,9 @@ functionality similar to larger movie databases.
 - `/movies/search?q=title` - Search movies by title substring.
 - `/movies/by_size?min=&max=` - Filter movies by file size in MB.
 - `/movies/shows/{show}` - List all movies for a particular show name.
+- `/shows` - List all unique show names present in the movie dataset.
+- `/shows/{show}/seasons` - List seasons available for a show.
+- `/shows/{show}/seasons/{season}/episodes` - List episodes for a specific season.
 - `/anime` - Returns a list of anime from the remote repo.
 - `/anime/{id}` - Look up an anime show by numeric `id`.
 - `/anime/search?q=title` - Search anime by title substring.
