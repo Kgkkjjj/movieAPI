@@ -24,6 +24,10 @@ from data_loader import (
     search_shows,
     get_show_summary,
     get_anime_count,
+    get_latest_movie,
+    get_latest_anime,
+    sort_movies_by_title,
+    sort_anime_by_title,
 )
 
 app = FastAPI(title="movieAPI")
@@ -55,6 +59,21 @@ def movies_sorted_by_size(order: str = "asc"):
 def movies_sorted_by_episode(order: str = "asc"):
     """Return movies sorted by season/episode order."""
     return {"movies": sort_movies_by_episode(order)}
+
+
+@app.get("/movies/sorted_by_title")
+def movies_sorted_by_title(order: str = "asc"):
+    """Return movies sorted alphabetically by title."""
+    return {"movies": sort_movies_by_title(order)}
+
+
+@app.get("/movies/latest")
+def movie_latest():
+    """Return the most recent movie based on season/episode."""
+    movie = get_latest_movie()
+    if movie is None:
+        raise HTTPException(status_code=404, detail="No movies available")
+    return movie
 
 
 @app.get("/movies/by_season/{season}")
@@ -153,6 +172,21 @@ def anime_count():
 def anime_random():
     """Return a random anime show."""
     show = get_random_anime()
+    if show is None:
+        raise HTTPException(status_code=404, detail="No anime available")
+    return show
+
+
+@app.get("/anime/sorted_by_title")
+def anime_sorted_by_title(order: str = "asc"):
+    """Return anime shows sorted alphabetically by title."""
+    return {"anime": sort_anime_by_title(order)}
+
+
+@app.get("/anime/latest")
+def anime_latest():
+    """Return the last anime show in the list."""
+    show = get_latest_anime()
     if show is None:
         raise HTTPException(status_code=404, detail="No anime available")
     return show

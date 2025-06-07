@@ -227,3 +227,18 @@ def get_latest_movie() -> Optional[dict]:
     """Return the movie with the highest season/episode."""
     movies = sort_movies_by_episode(order="desc")
     return movies[0] if movies else None
+
+
+def get_latest_anime() -> Optional[dict]:
+    """Return the last anime show in the list if available."""
+    shows = get_anime()
+    return shows[-1] if shows else None
+
+
+def sort_anime_by_title(order: str = "asc") -> List[dict]:
+    """Return anime shows sorted alphabetically by title."""
+    shows = sorted(get_anime(), key=lambda a: a.get("title", ""))
+    if order == "desc":
+        shows.reverse()
+    return shows
+

@@ -22,6 +22,8 @@ functionality similar to larger movie databases.
 - `/movies/stats` - Summary stats for movie file sizes.
 - `/movies/sorted_by_size` - Movies sorted by file size.
 - `/movies/sorted_by_episode` - Movies sorted by season/episode.
+- `/movies/sorted_by_title` - Movies sorted alphabetically by title.
+- `/movies/latest` - Retrieve the most recent movie.
 - `/movies/by_season/{season}` - Movies within a season.
 - `/movies/shows/{show}/season/{season}` - Movies for a show and season.
 - `/movies/shows/{show}/episode/{episode}` - Movies for a show and episode.
@@ -34,6 +36,8 @@ functionality similar to larger movie databases.
 - `/anime` - Returns a list of anime from the remote repo.
 - `/anime/count` - Total count of anime entries.
 - `/anime/random` - Retrieve a random anime show.
+- `/anime/sorted_by_title` - Anime shows sorted alphabetically by title.
+- `/anime/latest` - Retrieve the last anime show in the list.
 - `/anime/{id}` - Look up an anime show by numeric `id`.
 - `/anime/search?q=title` - Search anime by title substring.
 
