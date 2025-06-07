@@ -6,6 +6,8 @@ from data_loader import (
     get_anime_item,
     search_movies,
     search_anime,
+    filter_movies_by_size,
+    get_movies_by_show,
 )
 
 app = FastAPI(title="movieAPI")
@@ -18,6 +20,18 @@ def movies():
 @app.get("/movies/search")
 def movie_search(q: str):
     return {"movies": search_movies(q)}
+
+
+@app.get("/movies/by_size")
+def movie_by_size(min: float = 0.0, max: float = 1e9):
+    """Filter movies by file size in MB."""
+    return {"movies": filter_movies_by_size(min, max)}
+
+
+@app.get("/movies/shows/{show}")
+def movies_for_show(show: str):
+    """Return all movies belonging to a given show name."""
+    return {"movies": get_movies_by_show(show)}
 
 
 @app.get("/movies/{movie_id}")
